@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student workout — duidelijke keuze</title>
+  <style>
+    :root { --ink:#17212b; --muted:#5c6975; --line:#d8e3e8; --blue:#1688ad; --deep:#0d607e; --pale:#e8f8fc; --paper:#fff; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:#f2f7f8; }
+    main { max-width:720px; margin:auto; padding:28px 18px 52px; }
+    .eyebrow { margin:0 0 8px; color:var(--deep); font-size:.78rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    h1 { margin:0; font-size:clamp(1.8rem,7vw,2.7rem); line-height:1.08; letter-spacing:-.04em; }
+    .intro { max-width:570px; margin:14px 0 25px; color:var(--muted); font-size:1rem; line-height:1.5; }
+    .steps { display:flex; gap:8px; margin:0 0 18px; font-size:.78rem; color:var(--muted); }
+    .step { display:flex; align-items:center; gap:6px; }
+    .step b { display:grid; width:22px; height:22px; place-items:center; border-radius:50%; color:#fff; background:var(--blue); }
+    .card { padding:22px; border:1px solid var(--line); border-radius:18px; background:var(--paper); box-shadow:0 7px 24px rgba(24,57,71,.07); }
+    h2 { margin:0; font-size:1.25rem; letter-spacing:-.02em; }
+    .question { margin:6px 0 16px; color:var(--muted); }
+    .choice-grid { display:grid; gap:11px; }
+    .choice { width:100%; padding:17px; display:flex; align-items:center; gap:13px; text-align:left; color:inherit; border:2px solid var(--line); border-radius:13px; background:#fff; cursor:pointer; transition:.16s ease; }
+    .choice:hover, .choice:focus-visible { border-color:var(--blue); outline:none; transform:translateY(-1px); }
+    .choice[aria-pressed="true"] { border-color:var(--blue); background:var(--pale); box-shadow:0 0 0 3px rgba(22,136,173,.12); }
+    .icon { display:grid; flex:0 0 38px; width:38px; height:38px; place-items:center; border-radius:50%; color:var(--deep); background:#d8f2f8; font-size:1.1rem; }
+    .choice strong { display:block; font-size:1rem; }
+    .choice small { display:block; margin-top:2px; color:var(--muted); font-size:.82rem; }
+    .choice .arrow { margin-left:auto; color:var(--blue); font-size:1.4rem; }
+    .summary { margin-top:20px; padding:17px; border-radius:13px; color:#fff; background:var(--deep); }
+    .summary p { margin:0; font-size:.83rem; opacity:.83; }
+    .price { display:flex; align-items:baseline; gap:8px; margin:4px 0 2px; }
+    .price strong { font-size:1.65rem; letter-spacing:-.04em; }
+    .price span { font-size:.92rem; }
+    .saving { display:inline-block; margin-top:6px; padding:4px 8px; border-radius:99px; color:#07516d; background:#bdf0fa; font-size:.79rem; font-weight:800; }
+    .cta { width:100%; margin-top:16px; padding:15px 18px; border:0; border-radius:11px; color:#fff; background:var(--blue); font:inherit; font-weight:800; cursor:pointer; }
+    .cta:hover, .cta:focus-visible { background:#086f92; outline:3px solid rgba(22,136,173,.25); outline-offset:2px; }
+    .note { margin:18px 2px 0; color:var(--muted); font-size:.78rem; line-height:1.45; }
+    dialog { width:min(90vw,390px); padding:0; border:0; border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,.28); }
+    dialog::backdrop { background:rgba(9,27,35,.55); }
+    .dialog-body { padding:25px; }
+    .dialog-body h2 { margin-bottom:8px; }
+    .dialog-body p { color:var(--muted); line-height:1.5; }
+    .dialog-body button { padding:10px 15px; border:0; border-radius:8px; color:#fff; background:var(--deep); font:inherit; font-weight:700; cursor:pointer; }
+    @media (max-width:420px) { main { padding:22px 14px 42px; } .card { padding:18px; } .steps { font-size:.7rem; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Demo · heldere mobiele keuze</p>
+    <h1>Kies je student workout</h1>
+    <p class="intro">Eerst kies je de vorm die bij je past. Daarna zie je meteen de prijs per persoon en het voordeel van samen trainen.</p>
+    <div class="steps" aria-label="Boekingsstappen"><span class="step"><b>1</b> Workout</span><span>→</span><span class="step"><b>2</b> Aantal sessies</span><span>→</span><span class="step"><b>3</b> Boeken</span></div>
+
+    <section class="card" aria-labelledby="choice-title">
+      <h2 id="choice-title">Met wie wil je trainen?</h2>
+      <p class="question">Alle prijzen hieronder zijn per persoon.</p>
+      <div class="choice-grid">
+        <button class="choice" type="button" data-kind="solo" aria-pressed="true">
+          <span class="icon" aria-hidden="true">●</span>
+          <span><strong>Alleen trainen</strong><small>Persoonlijke begeleiding, 1 op 1</small></span><span class="arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="choice" type="button" data-kind="duo" aria-pressed="false">
+          <span class="icon" aria-hidden="true">● ●</span>
+          <span><strong>Samen trainen</strong><small>Train met een vriend(in)</small></span><span class="arrow" aria-hidden="true">›</span>
+        </button>
+      </div>
+
+      <div class="summary" aria-live="polite">
+        <p id="plan-name">Alleen trainen · één sessie</p>
+        <div class="price"><strong id="price">€45</strong><span id="per-person">per persoon</span></div>
+        <span class="saving" id="saving">Kies samen en bespaar €5 p.p.</span>
+      </div>
+      <button class="cta" id="book" type="button">Kies aantal sessies →</button>
+    </section>
+    <p class="note">Dit is een onafhankelijke demonstratie, geen echte boekingspagina. Het laat zien hoe een lange prijslijst op mobiel kan veranderen in één duidelijke stap.</p>
+  </main>
+
+  <dialog id="dialog">
+    <div class="dialog-body">
+      <h2>Volgende stap</h2>
+      <p id="dialog-text"></p>
+      <button type="button" id="close">Terug naar demo</button>
+    </div>
+  </dialog>
+
+  <script>
+    const plans = {
+      solo: { name: 'Alleen trainen · één sessie', price: '€45', saving: 'Kies samen en bespaar €5 p.p.' },
+      duo: { name: 'Samen trainen · één sessie', price: '€40', saving: 'Je bespaart €5 per persoon' }
+    };
+    let selected = 'solo';
+    const price = document.querySelector('#price');
+    const planName = document.querySelector('#plan-name');
+    const saving = document.querySelector('#saving');
+    const dialog = document.querySelector('#dialog');
+    document.querySelectorAll('.choice').forEach(button => button.addEventListener('click', () => {
+      selected = button.dataset.kind;
+      document.querySelectorAll('.choice').forEach(item => item.setAttribute('aria-pressed', item === button));
+      planName.textContent = plans[selected].name;
+      price.textContent = plans[selected].price;
+      saving.textContent = plans[selected].saving;
+    }));
+    document.querySelector('#book').addEventListener('click', () => {
+      document.querySelector('#dialog-text').textContent = `In een echte flow kies je hier 1 of 5 sessies voor ${selected === 'duo' ? 'jullie duo' : 'jouw training'}, vóór je naar het boekingssysteem gaat.`;
+      dialog.showModal();
+    });
+    document.querySelector('#close').addEventListener('click', () => dialog.close());
+  </script>
+</body>
+</html>
